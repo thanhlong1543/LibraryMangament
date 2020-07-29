@@ -49,7 +49,6 @@ public class LibraryMain {
 					countLoginFail++;
 			}
 			if (loginChoose == 2) {
-				System.out.println("Sign up to continue");
 				int isSignUp = userService.signUp();
 				while (isSignUp == 0) {
 					inputChoose = userService.isContinue("sign up again?");
@@ -61,7 +60,7 @@ public class LibraryMain {
 			}
 		}
 
-		// If role is user
+		// Loop If role is user
 		while (user != null && user.getRoleId() == 1) {
 
 			// Check reg_date
@@ -139,29 +138,13 @@ public class LibraryMain {
 
 				break;
 			case 4:
-
 				// edit user's info
-				System.out.printf("%-20s%-15s%-15s%s\n", "Name", "Password", "IdNumber", "PhoneNo");
-				System.out.printf("%-20s%-15s%-15s%s\n", user.getName(), user.getPassword(), user.getIdNum(),
-						user.getPhone());
-				System.out.println();
-				inputChoose = userService.isContinue("update information");
 
+				inputChoose = userService.isContinue("update information");
 				if (inputChoose.equalsIgnoreCase("NO"))
 					break;
 				int update = userService.updateUser(user);
-				while (update == 0) {
-					if (scanner.nextLine().equalsIgnoreCase("NO"))
-						break;
-					update = userService.updateUser(user);
-				}
-				if (update != 0) {
-
-					System.out.println("Update success");
-					System.out.printf("%-20s%-15s%-15s%s\n", "Name", "Password", "IdNumber", "PhoneNo");
-					System.out.printf("%-20s%-15s%-15s%s\n", user.getName(), user.getPassword(), user.getIdNum(),
-							user.getPhone());
-				}
+				
 				break;
 			default:
 
@@ -171,7 +154,7 @@ public class LibraryMain {
 				break;
 		}
 
-		// If role is librarian
+		// Loop If role is librarian
 		while (user != null && user.getRoleId() == 2) {
 			librarianService.showMenu();
 			int chooseService = 0;
@@ -232,6 +215,7 @@ public class LibraryMain {
 					System.out.println("You don't borrow any book");
 					break;
 				}
+
 				inputChoose = userService.isContinue("return book");
 				if (inputChoose.equalsIgnoreCase("YES")) {
 					success = librarianService.returnBook();

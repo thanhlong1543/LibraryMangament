@@ -77,6 +77,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int signUp() {
+		System.out.println("Sign up to continue");
 		System.out.print("Username: ");
 		String username = scanner.nextLine();
 		System.out.print("Password: ");
@@ -269,6 +270,10 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int updateUser(User user) {
 		int result = 0;
+		System.out.printf("%-20s%-15s%-15s%s\n", "Name", "Password", "IdNumber", "PhoneNo");
+		System.out.printf("%-20s%-15s%-15s%s\n", user.getName(), user.getPassword(), user.getIdNum(),
+				user.getPhone());
+		System.out.println();
 		System.out.print("Username: ");
 		user.setName(scanner.nextLine());
 		System.out.print("Password: ");
@@ -278,7 +283,20 @@ public class UserServiceImpl implements UserService {
 		System.out.print("Phone: ");
 		user.setPhone(scanner.nextLine());
 		try {
-			result = userRepository.update(user);
+			result  = userRepository.update(user);
+			while (result == 0) {
+				if (scanner.nextLine().equalsIgnoreCase("NO"))
+					break;
+				result = updateUser(user);
+			}
+
+			if (result != 0) {
+				
+				System.out.println("Update success");
+				System.out.printf("%-20s%-15s%-15s%s\n", "Name", "Password", "IdNumber", "PhoneNo");
+				System.out.printf("%-20s%-15s%-15s%s\n", user.getName(), user.getPassword(), user.getIdNum(),
+						user.getPhone());
+			}
 		} catch (SQLIntegrityConstraintViolationException e) {
 			System.out.println("Update fail! Username is already taken. Please try again. YES or NO");
 		} catch (SQLSyntaxErrorException e) {
@@ -288,6 +306,7 @@ public class UserServiceImpl implements UserService {
 		} catch (Exception e) {
 			System.out.println("Invalid information. Please try again. YES or NO");
 		}
+		
 		return result;
 	}
 
